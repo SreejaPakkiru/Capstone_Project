@@ -43,8 +43,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Start containers for testing
+      - name: Start Containers
         run: docker compose -f ./compose.yaml up -d
+
+      - name: Wait for Services
+        run: sleep 5   # give web1 and web2 some time to start
 
       - name: Run Smoke Test
         run: |
