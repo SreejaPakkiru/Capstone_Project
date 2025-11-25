@@ -56,10 +56,14 @@ jobs:
         run: docker compose -f ./compose.yaml up -d
         
       - name: Run Smoke Test
-        run: ./smoke-test.sh
+        run: |
+           chmod +x smoke-test.sh
+           ./smoke-test.sh
 
       - name: Run Integration Test
-        run: ./integration-test.sh
+        run: |
+            chmod +x integration-test.sh
+            ./integration-test.sh
 
       - name: Stop Containers
         run: docker compose -f ./compose.yaml down
