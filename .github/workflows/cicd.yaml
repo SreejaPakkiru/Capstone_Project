@@ -1,0 +1,88 @@
+name: Multi-Stage CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  TAG: ${{ github.sha }}
+
+jobs:
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ap-south-1
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # - name: Build Docker Images
+      #   run: |
+      #     echo "Building Docker Images..."
+      #     docker-compose -f ./compose.yaml build 
+      - name: Run docker compose build
+        uses: hoverkraft-tech/compose-action@3846bcd61da338e9eaaf83e7ed0234a12b099b72
+        with:
+          compose-file: "./compose.yaml"
+          services: |
+            web1
+            web2
+            nginx
+          command: build
+
+      - name: Push Images to ECR
+        run: |
+          echo "Pushing Docker Images to ECR..."
+          docker-compose -f ./compose.yaml push
+
+  docker-test:
+    runs-on: ubuntu-latest
+    needs: docker-build
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run Smoke Test
+        run: ./smoke-test.sh
+
+      - name: Run Integration Test
+        run: ./integration-test.sh
+
+    
+
+          
+  docker-deploy:
+    runs-on: ubuntu-latest
+    needs: docker-test
+    env:
+      EC2_INSTANCES: ${{ secrets.INSTANCE_IDS }}
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ap-south-1
+
+      - name: EC2 Connect and Deploy
+        run: |
+         echo "Deploying containers to EC2 instances via SSM..."
+         aws ssm send-command \
+          --document-name "AWS-RunShellScript" \
+          --targets "Key=instanceIds,Values=${{ secrets.INSTANCE_IDS }}" \
+          --parameters 'commands=[
+            "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 869588908060.dkr.ecr.ap-south-1.amazonaws.com",
+            "docker-compose pull",
+            "docker-compose up -d"
+          ]'
+
