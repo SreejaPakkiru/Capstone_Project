@@ -27,6 +27,7 @@ jobs:
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
+       #testing repo existence
       - name: Ensure ECR repository exists
         run: |
           aws ecr describe-repositories --repository-names ${{ env.ECR_REPOSITORY }} || \
