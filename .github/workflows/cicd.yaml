@@ -32,19 +32,19 @@ jobs:
           aws ecr describe-repositories --repository-names ${{ env.ECR_REPOSITORY }} || \
           aws ecr create-repository --repository-name ${{ env.ECR_REPOSITORY }}
 
-      - name: Build images using Docker Compose
-        uses: hoverkraft-tech/compose-action@3846bcd61da338e9eaaf83e7ed0234a12b099b72
-        with:
-          compose-file: "./compose.yml"
+      # - name: Build images using Docker Compose
+      #   uses: hoverkraft-tech/compose-action@3846bcd61da338e9eaaf83e7ed0234a12b099b72
+      #   with:
+      #     compose-file: "./compose.yml"
 
-      - name: Push images to ECR
-        run: |
-          docker compose -f ./compose.yml push
-          
-      # - name: Build and Push all images using Docker Compose
+      # - name: Push images to ECR
       #   run: |
-      #     docker compose -f ./compose.yaml build
-      #     docker compose -f ./compose.yaml push
+      #     docker compose -f ./compose.yml push
+          
+      - name: Build and Push all images using Docker Compose
+        run: |
+          docker compose -f ./compose.yaml build
+          docker compose -f ./compose.yaml push
 
   docker-test:
     runs-on: ubuntu-latest
