@@ -88,7 +88,7 @@ jobs:
             # Login to ECR
             aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com
             
-            # Create directory and clone repo (if needed)
+            # Create directory and clone repo 
             cd /home/ubuntu || mkdir -p /home/ubuntu && cd /home/ubuntu
             if [ ! -d "capstone_project" ]; then
               git clone https://github.com/SreejaPakkiru/Capstone_Project.git capstone_project
