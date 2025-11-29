@@ -115,14 +115,17 @@ jobs:
             aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 954692414134.dkr.ecr.ap-south-1.amazonaws.com
             
             #Create directory and clone repo 
-            cd /home/ubuntu || mkdir -p /home/ubuntu && cd /home/ubuntu
-            # if [ ! -d "capstone_project" ]; then
-            #   git clone https://github.com/SreejaPakkiru/Capstone_Project.git capstone_project
-            # fi
-            cd capstone_project
+            # cd /home/ubuntu || mkdir -p /home/ubuntu && cd /home/ubuntu
+            # # if [ ! -d "capstone_project" ]; then
+            # #   git clone https://github.com/SreejaPakkiru/Capstone_Project.git capstone_project
+            # # fi
+            # cd capstone_project
+            mkdir -p /home/ubuntu/capstone_project
+            cd /home/ubuntu/capstone_project
+
 
             #Puling and run images via Docker Compose
             docker compose -f compose.yaml pull
-            ocker compose -f compose.yaml up -d --remove-orphans
+            docker compose -f compose.yaml up -d --remove-orphans
             # docker compose -f ./compose.yaml pull
             # docker compose -f ./compose.yaml up -d --remove-orphans
