@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - main
-
+ 
 #Creeating global environment variables 
 env:
   ECR_REPOSITORY: capstone-project/capstone-repo
