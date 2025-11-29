@@ -6,7 +6,7 @@ on:
     branches:
       - main
  
-#Creeating global environment variables 
+#Creeating global environment variables  
 env:
   ECR_REPOSITORY: capstone-project/capstone-repo
   AWS_REGION: ap-south-1
