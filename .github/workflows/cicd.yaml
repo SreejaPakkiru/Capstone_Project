@@ -116,9 +116,9 @@ jobs:
             
             #Create directory and clone repo 
             cd /home/ubuntu || mkdir -p /home/ubuntu && cd /home/ubuntu
-            # if [ ! -d "capstone_project" ]; then
-            #   git clone https://github.com/SreejaPakkiru/Capstone_Project.git capstone_project
-            # fi
+            if [ ! -d "capstone_project" ]; then
+              git clone https://github.com/SreejaPakkiru/Capstone_Project.git capstone_project
+            fi
             cd capstone_project
 
             #Puling and run images via Docker Compose
