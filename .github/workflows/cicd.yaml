@@ -107,9 +107,7 @@ jobs:
       - name: Execute remote SSH commands
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: |
-           ${{ secrets.INSTANCE1_IP }},
-           ${{ secrets.INSTANCE2_IP }}
+          host: ${{ secrets.INSTANCE1_IP }}, ${{ secrets.INSTANCE2_IP }}
           username: ubuntu
           key: ${{ secrets.KEY }}
           script: |
@@ -124,5 +122,7 @@ jobs:
             cd capstone_project
 
             #Puling and run images via Docker Compose
-            docker compose -f ./compose.yaml pull
-            docker compose -f ./compose.yaml up -d --remove-orphans
+            docker compose -f compose.yaml pull
+            ocker compose -f compose.yaml up -d --remove-orphans
+            # docker compose -f ./compose.yaml pull
+            # docker compose -f ./compose.yaml up -d --remove-orphans
