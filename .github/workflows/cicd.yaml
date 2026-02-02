@@ -2,7 +2,7 @@ name: Multi-Stage CI/CD Pipeline
 
 #Trigger pipeline when code is pushed to the main branch
 on:
-  push:
+  push: 
     branches:
       - main 
 
